@@ -8,12 +8,15 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -49,10 +52,10 @@ public class MainActivity extends AppCompatActivity {
         btnLoad.setOnClickListener((v)->onClick2());
     }
     public void onClick() {
-        String bestUrl = "https://api.github.com/users";
-        if (!editText.getText().toString().isEmpty()){
-            bestUrl += "/" + editText.getText();
-        }
+        String bestUrl = "https://api.github.com/user/rumpilstilstkin";
+      //  if (!editText.getText().toString().isEmpty()){
+      //      bestUrl += "/" + editText.getText();
+      //  }
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkinfo = connectivityManager.getActiveNetworkInfo();
@@ -100,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
             connection.setUseCaches(false);
             connection.setDoInput(true);
             int responseCode = connection.getResponseCode();
+
             if (responseCode == HttpURLConnection.HTTP_OK) { // 200 OK
                 System.out.println("Метод запроса: " +
                                    connection.getRequestMethod());
@@ -184,9 +188,11 @@ public class MainActivity extends AppCompatActivity {
                 }
                 Headers responseHeaders = response.headers();
                 for (int i = 0; i < responseHeaders.size(); i++) {
-                    System.out.println(responseHeaders.name(i) + ": " + responseHeaders.value(i));
+                    Log.d("Dto", responseHeaders.name(i) + ": " + responseHeaders.value(i));
                 }
                 final String responseData = response.body().string();
+                JSONObject object = new JSONObject();
+                boolean pole = object.isNull("ghgfhg");
                 MainActivity.this.runOnUiThread(() -> {
                     mInfoTextView.setText(responseData);
                     progressBar.setVisibility(View.GONE);
